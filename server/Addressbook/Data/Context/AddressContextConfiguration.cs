@@ -1,5 +1,4 @@
-﻿using System;
-using Addressbook.Data.Models;
+﻿using Addressbook.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

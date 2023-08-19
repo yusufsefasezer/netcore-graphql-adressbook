@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Addressbook.Schema.Query.Type
+﻿namespace Addressbook.Schema.Query.Type
 {
     public class ContactTypeEnumType: GraphQL.Types.EnumerationGraphType<Data.Enumerations.ContactType>
     {

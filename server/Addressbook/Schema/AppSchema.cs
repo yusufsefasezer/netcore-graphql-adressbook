@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GraphQL;
-using GraphQL.Types;
-
-namespace Addressbook.Schema
+﻿namespace Addressbook.Schema
 {
     public class AppSchema : GraphQL.Types.Schema
     {
