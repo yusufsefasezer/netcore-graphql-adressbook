@@ -15,12 +15,11 @@ namespace Addressbook.Schema.Query
                 .Resolve(context => appDbContext.Contacts
                 .Where(p => p.IsDeleted == false)
                 .OrderBy(p => p.FirstName)
-                .ToList()
-                );
+                .ToList());
 
             Field<Type.ContactType>("contact")
                 .Description("Get contact by contactId")
-                .Arguments(new QueryArguments(new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "id" }))
+                .Argument<NonNullGraphType<IntGraphType>>("id")
                 .Resolve(context =>
                 {
                     var id = context.GetArgument<int>("id");
@@ -28,7 +27,7 @@ namespace Addressbook.Schema.Query
 
                     if (foundContact == null)
                     {
-                        context.Errors.Add(new GraphQL.ExecutionError("Contact not found."));
+                        context.Errors.Add(new ExecutionError("Contact not found."));
                         return null;
                     }
 
@@ -37,7 +36,7 @@ namespace Addressbook.Schema.Query
 
             Field<Type.AddressType>("address")
                 .Description("Get address by addressId")
-                .Arguments(new QueryArguments(new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "id" }))
+                .Argument<NonNullGraphType<IntGraphType>>("id")
                 .Resolve(context =>
                 {
                     var id = context.GetArgument<int>("id");
@@ -45,7 +44,7 @@ namespace Addressbook.Schema.Query
 
                     if (foundAddress == null)
                     {
-                        context.Errors.Add(new GraphQL.ExecutionError("Address not found."));
+                        context.Errors.Add(new ExecutionError("Address not found."));
                         return null;
                     }
 

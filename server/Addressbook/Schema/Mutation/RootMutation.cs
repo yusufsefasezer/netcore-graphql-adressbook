@@ -12,7 +12,7 @@ namespace Addressbook.Schema.Mutation
 
             Field<Query.Type.ContactType>("addContact")
                 .Description("Add new contact")
-                .Arguments(new QueryArguments(new QueryArgument<NonNullGraphType<Type.ContactInputType>> { Name = "contact" }))
+                .Argument<NonNullGraphType<Type.ContactInputType>>("contact")
                 .Resolve(context =>
                 {
                     var contact = context.GetArgument<Data.Models.Contact>("contact");
@@ -35,10 +35,8 @@ namespace Addressbook.Schema.Mutation
 
             Field<Query.Type.ContactType>("updateContact")
                 .Description("Update contact specified by contactId")
-                .Arguments(new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "contactId" },
-                    new QueryArgument<NonNullGraphType<Type.ContactInputType>> { Name = "contact" }
-                ))
+                .Arguments(new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "contactId" },
+                    new QueryArgument<NonNullGraphType<Type.ContactInputType>> { Name = "contact" })
                 .Resolve(context =>
                 {
                     var contactId = context.GetArgument<int>("contactId");
@@ -69,9 +67,7 @@ namespace Addressbook.Schema.Mutation
 
             Field<BooleanGraphType>("deleteContact")
                 .Description("Delete contact specified by contactId")
-                .Arguments(new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "contactId" }
-                ))
+                .Argument<NonNullGraphType<IntGraphType>>("contactId")
                 .Resolve(context =>
                 {
                     var contactId = context.GetArgument<int>("contactId");
@@ -94,10 +90,8 @@ namespace Addressbook.Schema.Mutation
 
             Field<Query.Type.AddressType>("addAddress")
                 .Description("Add new address")
-                .Arguments(new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "contactId" },
-                    new QueryArgument<NonNullGraphType<Type.AddressInputType>> { Name = "address" }
-                ))
+                .Arguments(new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "contactId" },
+                    new QueryArgument<NonNullGraphType<Type.AddressInputType>> { Name = "address" })
                 .Resolve(context =>
                 {
                     var address = context.GetArgument<Data.Models.Address>("address");
@@ -121,10 +115,8 @@ namespace Addressbook.Schema.Mutation
 
             Field<Query.Type.AddressType>("updateAddress")
                 .Description("Update address specified by addressId")
-                .Arguments(new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "addressId" },
-                    new QueryArgument<NonNullGraphType<Type.AddressInputType>> { Name = "address" }
-                ))
+                .Arguments(new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "addressId" },
+                    new QueryArgument<NonNullGraphType<Type.AddressInputType>> { Name = "address" })
                 .Resolve(context =>
                 {
                     var addressId = context.GetArgument<int>("addressId");
@@ -153,9 +145,7 @@ namespace Addressbook.Schema.Mutation
 
             Field<BooleanGraphType>("deleteAddress")
                 .Description("Delete address specified by addressId")
-                .Arguments(new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "addressId" }
-                ))
+                .Argument<NonNullGraphType<IntGraphType>>("addressId")
                 .Resolve(context =>
                 {
                     var addressId = context.GetArgument<int>("addressId");

@@ -59,7 +59,7 @@ namespace Addressbook.data.Migrations
             migrationBuilder.InsertData(
                 table: "Contacts",
                 columns: new[] { "Id", "ContactType", "CreateDateTime", "Email", "FirstName", "LastName", "Notes", "PhoneNumber", "UpdateDateTime", "WebAddress" },
-                values: new object[] { 1, (byte)1, new DateTime(2019, 8, 8, 21, 28, 44, 102, DateTimeKind.Local).AddTicks(8728), "yusufsezer@mail.com", "Yusuf", "SEZER", "N/A", "+90 538 693 4533", new DateTime(2019, 8, 8, 21, 28, 44, 103, DateTimeKind.Local).AddTicks(5070), "www.yusufsezer.com" });
+                values: new object[] { 1, (byte)1, new DateTime(2019, 8, 8, 21, 28, 44, 102, DateTimeKind.Local).AddTicks(8728), "yusufsezer@mail.com", "Yusuf", "Sezer", "N/A", "+90 538 693 4533", new DateTime(2019, 8, 8, 21, 28, 44, 103, DateTimeKind.Local).AddTicks(5070), "www.yusufsezer.com" });
 
             migrationBuilder.InsertData(
                 table: "Contacts",
