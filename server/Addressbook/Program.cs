@@ -1,24 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using GraphQL;
+using Microsoft.EntityFrameworkCore;
 
-namespace Addressbook
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors();
+
+builder.Services.AddDbContext<Addressbook.Data.Context.AppDbContext>(options =>
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateWebHostBuilder(args).Build().Run();
-        }
+    //options.UseInMemoryDatabase(nameof(Addressbook));
+    options.UseSqlServer(builder.Configuration.GetConnectionString(nameof(Addressbook)));
+},ServiceLifetime.Singleton);
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
-    }
-}
+builder.Services.AddScoped<Addressbook.Schema.AppSchema>();
+builder.Services.AddGraphQL(options =>
+{
+    options.AddSystemTextJson();
+    options.AddSchema<Addressbook.Schema.AppSchema>();
+    options.AddGraphTypes();
+});
+
+var app = builder.Build();
+
+app.UseCors(builder => builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+
+app.UseGraphQL<Addressbook.Schema.AppSchema>();
+
+app.UseGraphQLPlayground();
+
+app.MapGet("/", () => "Hello World!");
+
+app.Run();

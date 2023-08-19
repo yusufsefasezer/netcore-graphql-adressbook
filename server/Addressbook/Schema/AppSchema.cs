@@ -9,10 +9,10 @@ namespace Addressbook.Schema
 {
     public class AppSchema : GraphQL.Types.Schema
     {
-        public AppSchema(IDependencyResolver resolver) : base(resolver)
+        public AppSchema(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            Query = resolver.Resolve<Query.RootQuery>();
-            Mutation = resolver.Resolve<Mutation.RootMutation>();
+            Query = serviceProvider.GetService<Query.RootQuery>();
+            Mutation = serviceProvider.GetService<Mutation.RootMutation>();
         }
     }
 }
