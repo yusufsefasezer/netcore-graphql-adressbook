@@ -1,30 +1,19 @@
-import React from 'react'
-import { ApolloProvider } from 'react-apollo'
-import { ApolloClient } from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { HttpLink } from 'apollo-link-http'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import App from './App'
-import * as serviceWorker from './serviceWorker'
 import { GRAPHQL_URL } from './Global'
 
-const cache = new InMemoryCache();
-const link = new HttpLink({
-  uri: `${GRAPHQL_URL}`
-});
-
 const client = new ApolloClient({
-  cache,
-  link
+  uri: `${GRAPHQL_URL}`,
+  cache: new InMemoryCache()
 });
 
-ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>
-  , document.getElementById('root'));
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  </React.StrictMode>
+);

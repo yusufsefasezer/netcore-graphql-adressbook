@@ -1,16 +1,21 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { Header, Form, Button, Icon } from 'semantic-ui-react';
+import { useNavigate, useParams } from "react-router-dom";
 import { Country } from '../../../Country';
 
-export default class AddressForm extends Component {
+export default function AddressForm(props) {
 
-    state = {
+    const navigate = useNavigate();
+
+    const { addressId, contactId } = useParams();
+
+    const [inputs, setInputs] = useState({
         address: {
-            name: this.props.name,
-            country: this.props.country,
-            city: this.props.city,
-            postalCode: this.props.postalCode,
-            addressLine: this.props.addressLine,
+            name: props.name,
+            country: props.country,
+            city: props.city,
+            postalCode: props.postalCode,
+            addressLine: props.addressLine,
         },
         errors: {
             name: false,
@@ -19,130 +24,115 @@ export default class AddressForm extends Component {
             postalCode: false,
             addressLine: false
         }
-    }
+    });
 
-    onChange = (e, { name, value }) => {
-        this.setState(prevState => ({
+    const onChange = (e, { name, value }) => {
+        setInputs(prevState => ({
             address: {
                 ...prevState.address,
                 [name]: value
+            },
+            errors: {
+                ...prevState.errors
             }
         }));
     }
 
-    onBlur = (e) => {
+    const onBlur = (e) => {
         const { name, value } = e.target;
         if (!name) return;
-        this.setState(prevState => ({
+        setInputs(prevState => ({
             address: {
                 ...prevState.address,
                 [name]: value
             },
             errors: {
                 ...prevState.errors,
-                [name]: (value === "")
+                [name]: value === ""
             }
         }));
     }
 
-    onSubmit = (e) => {
+    const onSubmit = (e) => {
         e.preventDefault();
 
-        this.props.operation({
+        props.operation({
             variables: {
-                addressId: this.props.match.params.addressId,
-                contactId: this.props.match.params.contactId,
-                address: this.state.address
+                addressId: parseInt(addressId, 10),
+                contactId: parseInt(contactId, 10),
+                address: inputs.address
             }
         });
     }
 
-    render() {
-        return (
-            <React.Fragment>
+    return (
+        <>
+            <Header as='h2' textAlign='center'>{props.title}</Header>
 
-                <Header as='h2' textAlign='center'>{this.props.title}</Header>
+            <Form size='large' onSubmit={onSubmit}>
 
-                <Form size='large' onSubmit={this.onSubmit}>
+                <Form.Input
+                    name='name'
+                    label='Name:'
+                    placeholder='Address Name'
+                    maxLength='20'
+                    required
+                    value={inputs.address.name}
+                    error={inputs.errors.name}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    autoFocus />
 
-                    <Form.Input
-                        name='name'
-                        label='Name:'
-                        placeholder='Address Name'
-                        maxLength='20'
-                        required
-                        value={this.state.address.name}
-                        error={this.state.errors.name}
-                        onChange={this.onChange}
-                        onBlur={this.onBlur}
-                        autoFocus />
+                <Form.Dropdown
+                    name='country'
+                    label='Country:'
+                    placeholder='Select Country'
+                    required
+                    fluid search selection
+                    options={Country}
+                    defaultValue={inputs.address.country}
+                    error={inputs.errors.country}
+                    onChange={onChange}
+                    onBlur={onBlur} />
 
-                    <Form.Dropdown
-                        name='country'
-                        label='Country:'
-                        placeholder='Select Country'
-                        required
-                        fluid search selection
-                        options={Country}
-                        defaultValue={this.state.address.country}
-                        error={this.state.errors.country}
-                        onChange={this.onChange}
-                        onBlur={this.onBlur} />
+                <Form.Input
+                    name='city'
+                    label='City:'
+                    placeholder='City'
+                    maxLength='30'
+                    required
+                    value={inputs.address.city}
+                    error={inputs.errors.city}
+                    onChange={onChange}
+                    onBlur={onBlur} />
 
-                    <Form.Input
-                        name='city'
-                        label='City:'
-                        placeholder='City'
-                        maxLength='30'
-                        required
-                        value={this.state.address.city}
-                        error={this.state.errors.city}
-                        onChange={this.onChange}
-                        onBlur={this.onBlur} />
+                <Form.Input
+                    name='postalCode'
+                    label='Postal Code:'
+                    placeholder='Postal Code'
+                    maxLength='10'
+                    required
+                    value={inputs.address.postalCode}
+                    error={inputs.errors.postalCode}
+                    onChange={onChange}
+                    onBlur={onBlur} />
 
-                    <Form.Input
-                        name='postalCode'
-                        label='Postal Code:'
-                        placeholder='Postal Code'
-                        maxLength='10'
-                        required
-                        value={this.state.address.postalCode}
-                        error={this.state.errors.postalCode}
-                        onChange={this.onChange}
-                        onBlur={this.onBlur} />
+                <Form.TextArea
+                    name='addressLine'
+                    label='Address:'
+                    placeholder='Address'
+                    maxLength='255'
+                    required
+                    value={inputs.address.addressLine}
+                    error={inputs.errors.addressLine}
+                    onChange={onChange}
+                    onBlur={onBlur} />
 
-                    <Form.TextArea
-                        name='addressLine'
-                        label='Address:'
-                        placeholder='Address'
-                        maxLength='255'
-                        required
-                        value={this.state.address.addressLine}
-                        error={this.state.errors.addressLine}
-                        onChange={this.onChange}
-                        onBlur={this.onBlur} />
+                <Button color='red' labelPosition='left' icon onClick={() => { navigate(-1) }}><Icon name='arrow left' /> Cancel</Button>
 
-                    <Button
-                        color='red'
-                        labelPosition='left'
-                        icon
-                        onClick={() => { this.props.history.goBack() }}>
-                        <Icon name='arrow left' />
-                        Cancel
-                    </Button>
+                <Button color='green' labelPosition='right' icon><Icon name='send' /> Submit</Button>
 
-                    <Button
-                        color='green'
-                        labelPosition='right'
-                        icon>
-                        <Icon name='send' />
-                        Submit
-                    </Button>
-
-                </Form>
-
-            </React.Fragment>
-        );
-    };
-
-};
+            </Form>
+        </>
+    );
+}

@@ -7,16 +7,16 @@ export default function HeaderMenu() {
     return (
         <Menu secondary className="header-menu">
 
-            <NavLink to="/" className={'item'} exact>Home</NavLink>
-            <NavLink to="/about" className={'item'} exact>About</NavLink>
-            <NavLink to="/404" className={'item'} exact>404</NavLink>
+            <NavLink to="/" className={'item'}>Home</NavLink>
+            <NavLink to="/about" className={'item'}>About</NavLink>
+            <NavLink to="/404" className={'item'}>404</NavLink>
 
             <Menu.Menu position='right'>
-                <NavLink to="/contact/add" className={'item'} exact>
+                <NavLink to="/contact/add" className={'item'}>
                     <i className="icon plus square red"></i> Add New
                 </NavLink>
             </Menu.Menu>
 
         </Menu>
     );
-};
+}

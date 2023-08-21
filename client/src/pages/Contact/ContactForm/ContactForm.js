@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
+import { useNavigate, useParams } from "react-router-dom";
 import { Header, Form, Input, Button, Icon } from 'semantic-ui-react';
 
 const groupOptions = [
@@ -8,17 +9,21 @@ const groupOptions = [
     { value: 'OTHER', text: 'Other' }
 ];
 
-export class ContactForm extends Component {
+export default function ContactForm(props) {
 
-    state = {
+    const navigate = useNavigate();
+
+    const { contactId } = useParams();
+
+    const [inputs, setInputs] = useState({
         contact: {
-            firstName: this.props.firstName,
-            lastName: this.props.lastName,
-            phoneNumber: this.props.phoneNumber,
-            email: this.props.email,
-            contactType: this.props.contactType,
-            webAddress: this.props.webAddress,
-            notes: this.props.notes
+            firstName: props.firstName,
+            lastName: props.lastName,
+            phoneNumber: props.phoneNumber,
+            email: props.email,
+            contactType: props.contactType,
+            webAddress: props.webAddress,
+            notes: props.notes
         },
         errors: {
             firstName: false,
@@ -29,21 +34,24 @@ export class ContactForm extends Component {
             webAddress: false,
             notes: false
         }
-    }
+    });
 
-    onChange = (e, { name, value }) => {
-        this.setState(prevState => ({
+    const onChange = (e, { name, value }) => {
+        setInputs(prevState => ({
             contact: {
                 ...prevState.contact,
                 [name]: value
+            },
+            errors: {
+                ...prevState.errors
             }
         }));
     }
 
-    onBlur = (e) => {
+    const onBlur = (e) => {
         const { name, value } = e.target;
         if (!name) return;
-        this.setState(prevState => ({
+        setInputs(prevState => ({
             contact: {
                 ...prevState.contact,
                 [name]: value
@@ -55,125 +63,104 @@ export class ContactForm extends Component {
         }));
     }
 
-    onSubmit = (e) => {
+    const onSubmit = (e) => {
         e.preventDefault();
 
-        this.props.operation({
+        props.operation({
             variables: {
-                contactId: this.props.match.params.contactId,
-                contact: this.state.contact
+                contactId: parseInt(contactId, 10),
+                contact: inputs.contact
             }
         });
     }
 
-    render() {
-        return (
-            <React.Fragment>
+    return (
+        <>
+            <Header as='h2' textAlign='center'>{props.title}</Header>
 
-                <Header
-                    as='h2'
-                    textAlign='center'>
-                    {this.props.title}
-                </Header>
+            <Form size='large' onSubmit={onSubmit}>
 
-                <Form size='large' onSubmit={this.onSubmit}>
+                <Form.Input
+                    name='firstName'
+                    label='First name:'
+                    placeholder='First Name'
+                    maxLength='50'
+                    required
+                    value={inputs.contact.firstName}
+                    error={inputs.errors.firstName}
+                    onChange={onChange}
+                    onBlur={onBlur} />
 
-                    <Form.Input
-                        name='firstName'
-                        label='First name:'
-                        placeholder='First Name'
-                        maxLength='50'
-                        required
-                        value={this.state.contact.firstName}
-                        error={this.state.errors.firstName}
-                        onChange={this.onChange}
-                        onBlur={this.onBlur} />
+                <Form.Input
+                    name='lastName'
+                    label='Last name:'
+                    placeholder='Last Name'
+                    maxLength='50'
+                    value={inputs.contact.lastName}
+                    error={inputs.errors.lastName}
+                    onChange={onChange}
+                    onBlur={onBlur} />
 
-                    <Form.Input
-                        name='lastName'
-                        label='Last name:'
-                        placeholder='Last Name'
-                        maxLength='50'
-                        value={this.state.contact.lastName}
-                        error={this.state.errors.lastName}
-                        onChange={this.onChange}
-                        onBlur={this.onBlur} />
+                <Form.Input
+                    name='phoneNumber'
+                    type='tel'
+                    label='Phone number:'
+                    placeholder='Phone Number'
+                    maxLength='20'
+                    value={inputs.contact.phoneNumber}
+                    error={inputs.errors.phoneNumber}
+                    onChange={onChange}
+                    onBlur={onBlur} />
 
-                    <Form.Input
-                        name='phoneNumber'
-                        type='tel'
-                        label='Phone number:'
-                        placeholder='Phone Number'
-                        maxLength='20'
-                        value={this.state.contact.phoneNumber}
-                        error={this.state.errors.phoneNumber}
-                        onChange={this.onChange}
-                        onBlur={this.onBlur} />
+                <Form.Input
+                    name='email'
+                    type='email'
+                    label='E-mail:'
+                    placeholder='E-mail address'
+                    maxLength='100'
+                    required
+                    value={inputs.contact.email}
+                    error={inputs.errors.email}
+                    onChange={onChange}
+                    onBlur={onBlur} />
 
-                    <Form.Input
-                        name='email'
-                        type='email'
-                        label='E-mail:'
-                        placeholder='E-mail address'
+                <Form.Select
+                    name='contactType'
+                    label='Group:'
+                    options={groupOptions}
+                    value={inputs.contact.contactType || groupOptions[0].value}
+                    error={inputs.errors.contactType}
+                    onChange={onChange}
+                    onBlur={onBlur} />
+
+                <Form.Field>
+                    <label>Web address:</label>
+                    <Input
+                        name='webAddress'
+                        label='https://'
+                        placeholder='Web address'
                         maxLength='100'
-                        required
-                        value={this.state.contact.email}
-                        error={this.state.errors.email}
-                        onChange={this.onChange}
-                        onBlur={this.onBlur} />
+                        value={inputs.contact.webAddress}
+                        error={inputs.errors.webAddress}
+                        onChange={onChange}
+                        onBlur={onBlur} />
+                </Form.Field>
 
-                    <Form.Select
-                        name='contactType'
-                        label='Group:'
-                        options={groupOptions}
-                        value={this.state.contact.contactType || groupOptions[0].value}
-                        error={this.state.errors.contactType}
-                        onChange={this.onChange}
-                        onBlur={this.onBlur} />
+                <Form.TextArea
+                    name='notes'
+                    label='Notes:'
+                    placeholder='Notes'
+                    maxLength='255'
+                    value={inputs.contact.notes}
+                    error={inputs.errors.notes}
+                    onChange={onChange}
+                    onBlur={onBlur} />
 
-                    <Form.Field>
-                        <label>Web address:</label>
-                        <Input
-                            name='webAddress'
-                            label='http://'
-                            placeholder='Web address'
-                            maxLength='100'
-                            value={this.state.contact.webAddress}
-                            error={this.state.errors.webAddress}
-                            onChange={this.onChange}
-                            onBlur={this.onBlur} />
-                    </Form.Field>
+                <Button color='red' labelPosition='left' icon onClick={() => { navigate(-1) }}><Icon name='arrow left' /> Cancel</Button>
 
-                    <Form.TextArea
-                        name='notes'
-                        label='Notes:'
-                        placeholder='Notes'
-                        maxLength='255'
-                        value={this.state.contact.notes}
-                        error={this.state.errors.notes}
-                        onChange={this.onChange}
-                        onBlur={this.onBlur} />
+                <Button color='green' labelPosition='right' icon><Icon name='send' /> Submit</Button>
 
-                    <Button
-                        color='red'
-                        labelPosition='left'
-                        icon onClick={() => { this.props.history.goBack() }}>
-                        <Icon name='arrow left' />
-                        Cancel
-                    </Button>
-
-                    <Button
-                        color='green'
-                        labelPosition='right' icon>
-                        <Icon name='send' />
-                        Submit
-                    </Button>
-                </Form>
-
-            </React.Fragment >
-        );
-    };
-
-};
-
-export default ContactForm;
+            </Form>
+        </>
+    );
+}

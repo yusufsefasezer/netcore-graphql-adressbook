@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export const getContacts = gql`
+export const GET_CONTACTS = gql`
 query getContacts {
   contacts {
     id
@@ -12,7 +12,7 @@ query getContacts {
   }
 }`;
 
-export const getContactById = gql`
+export const GET_CONTACT_BY_ID = gql`
 query getContactById($id: Int!) {
   contact(id: $id) {
     id

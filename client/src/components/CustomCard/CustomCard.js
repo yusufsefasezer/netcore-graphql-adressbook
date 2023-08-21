@@ -1,14 +1,21 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Card, Icon, Grid, Header } from 'semantic-ui-react'
-import { Mutation } from 'react-apollo'
-import { deleteContact } from '../../queries/Mutation/ContactMutation'
-import { getContacts } from '../../queries/Query/ContactQuery'
+import { useMutation } from '@apollo/client';
+import { DELETE_CONTACT } from '../../queries/Mutation/ContactMutation'
+import { GET_CONTACTS } from '../../queries/Query/ContactQuery'
 import ErrorComponent from '../ErrorComponent/ErrorComponent'
 
 export default function CustomCard(props) {
 
     const fullName = `${props.firstName} ${props.lastName}`;
+
+    const [deleteContactMutation, { loading, error }] = useMutation(DELETE_CONTACT, {
+        refetchQueries: [GET_CONTACTS]
+    });
+
+    if (loading) return <p>loading...</p>;
+    if (error) return <ErrorComponent title="Error">{error.message}</ErrorComponent>;
 
     return (
         <Card link>
@@ -29,31 +36,18 @@ export default function CustomCard(props) {
             <Card.Content extra>
                 <Grid.Column floated='left'>
                     <Icon name='address book outline' circular />{props.countOfAddress} Address
-            </Grid.Column>
+                </Grid.Column>
 
                 <Grid.Column floated='right'>
                     <Link to={props.editUrl}><Icon link name='edit' color='green' circular /></Link>
-                    <Mutation
-                        mutation={deleteContact}
-                        variables={{ contactId: props.id }}
-                        refetchQueries={[{
-                            query: getContacts
-                        }]}>
-                        {(mutate, { loading, error }) => {
-                            if (loading) return <p>loading...</p>
-                            if (error) return <ErrorComponent title="Error">{error.message}</ErrorComponent>
-                            return (
-                                <Link to={props.editUrl} onClick={(e) => {
-                                    e.preventDefault();
-                                    mutate();
-                                }}>
-                                    <Icon link name='delete' color='red' circular />
-                                </Link>
-                            )
-                        }}
-                    </Mutation>
+                    <Link onClick={e => {
+                        e.preventDefault();
+                        deleteContactMutation({ variables: { contactId: props.id } });
+                    }}>
+                        <Icon link name='delete' color='red' circular />
+                    </Link>
                 </Grid.Column>
             </Card.Content>
         </Card>
     );
-};
+}

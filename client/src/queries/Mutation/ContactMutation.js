@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export const addContact = gql`
+export const ADD_CONTACT = gql`
 mutation addContact($contact: ContactInputType!) {
   addContact(contact: $contact) {
     id
@@ -9,7 +9,7 @@ mutation addContact($contact: ContactInputType!) {
   }
 }`
 
-export const updateContact = gql`
+export const UPDATE_CONTACT = gql`
 mutation updateContact($contactId: Int!, $contact: ContactInputType!) {
   updateContact(contactId: $contactId, contact: $contact) {
     id
@@ -18,7 +18,7 @@ mutation updateContact($contactId: Int!, $contact: ContactInputType!) {
   }
 }`
 
-export const deleteContact = gql`
+export const DELETE_CONTACT = gql`
 mutation deleteContact($contactId: Int!) {
   deleteContact(contactId: $contactId)
 }`

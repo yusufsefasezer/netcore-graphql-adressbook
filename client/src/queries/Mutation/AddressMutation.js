@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export const addAddress = gql`
+export const ADD_ADDRESS = gql`
 mutation addAddress($contactId: Int!, $address: AddressInputType!) {
   addAddress(contactId: $contactId, address: $address) {
     id
@@ -10,7 +10,7 @@ mutation addAddress($contactId: Int!, $address: AddressInputType!) {
   }
 }`
 
-export const updateAddress = gql`
+export const UPDATE_ADDRESS = gql`
 mutation updateAddress($addressId: Int!, $address: AddressInputType!) {
   updateAddress(addressId: $addressId, address: $address) {
     id
@@ -22,7 +22,7 @@ mutation updateAddress($addressId: Int!, $address: AddressInputType!) {
   }
 }`
 
-export const deleteAddress = gql`
+export const DELETE_ADDRESS = gql`
 mutation deleteAddress($addressId: Int!) {
   deleteAddress(addressId: $addressId)
 }`

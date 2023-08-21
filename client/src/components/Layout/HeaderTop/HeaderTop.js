@@ -26,4 +26,4 @@ export default function HeaderTop(props) {
             </Grid.Row>
         </Grid>
     );
-};
+}

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export const getAddressById = gql`
+export const GET_ADDRESS_BY_ID = gql`
 query getAddressById($id: Int!) {
   address(id: $id) {
     id

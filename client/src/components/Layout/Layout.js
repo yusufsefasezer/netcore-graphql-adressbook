@@ -3,8 +3,9 @@ import { Container, Segment } from 'semantic-ui-react'
 import './Layout.css'
 import HeaderTop from './HeaderTop/HeaderTop'
 import HeaderMenu from './HeaderMenu/HeaderMenu'
+import { Outlet } from 'react-router-dom'
 
-export default function Layout(props) {
+export default function Layout() {
     return (
         <Container>
             <Segment padded className="wrapper">
@@ -15,10 +16,10 @@ export default function Layout(props) {
                 </header>
 
                 <section>
-                    {props.children}
+                    <Outlet />
                 </section>
 
             </Segment>
         </Container>
     );
-};
+}
