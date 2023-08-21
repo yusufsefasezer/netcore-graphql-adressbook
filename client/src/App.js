@@ -47,28 +47,4 @@ function App() {
   );
 }
 
-// function App1() {
-//   return (
-//     <BrowserRouter>
-//       <Layout>
-//         <Switch>
-//           <Route path="/" exact component={Home} />
-//           <Route path="/about" exact component={About} />
-
-//           <Route path={`/${CONTACT_PREFIX}/:contactId(\\d+)`} exact component={DetailsContact} />
-
-//           <Route path={`/${CONTACT_PREFIX}/${ADD_PREFIX}`} exact component={AddContact} />
-//           <Route path={`/${CONTACT_PREFIX}/:contactId(\\d+)/${EDIT_PREFIX}`} exact component={EditContact} />
-
-//           <Route path={`/${CONTACT_PREFIX}/:contactId(\\d+)/${ADDRESS_PREFIX}/${ADD_PREFIX}`} exact component={AddAddress} />
-//           <Route path={`/${CONTACT_PREFIX}/:contactId(\\d+)/${ADDRESS_PREFIX}/:addressId(\\d+)/${EDIT_PREFIX}`} exact component={EditAddress} />
-
-//           <Route path="/blank" exact component={Blank} />
-//           <Route path="*" exact component={NotFound} />
-//         </Switch>
-//       </Layout>
-//     </BrowserRouter>
-//   );
-// };
-
 export default App;
